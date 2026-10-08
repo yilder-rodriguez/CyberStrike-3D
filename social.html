@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#090d0c" />
+    <title>El Parche | CyberStrike 3D</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link href="./css/social.css" rel="stylesheet" />
+  </head>
+  <body class="social-page">
+    <header class="social-top">
+      <a href="./menu.html" class="back-link">
+        ←
+        <span>EL PARCHE</span>
+      </a>
+      <div class="page-brand">
+        <span>CYBERSTRIKE / CONEXIONES</span>
+        <h1>
+          LA
+          <em>CUADRILLA</em>
+        </h1>
+      </div>
+      <a class="switch-link" href="./menu.html">MENÚ ↗</a>
+    </header>
+    <main class="container social-layout">
+      <section class="social-hero">
+        <div>
+          <span class="eyebrow">JUEGA A TU MANERA, PERO MEJOR EN PARCHE</span>
+          <h2>
+            Tu gente.
+            <br />
+            <em>Tu próxima partida.</em>
+          </h2>
+          <p>Conéctate, sube de rango y armen la vuelta.</p>
+        </div>
+        <div class="signal-mark">
+          <span></span>
+          <b>
+            CANAL
+            <br />
+            ABIERTO
+          </b>
+        </div>
+      </section>
+      <div id="social-status" class="social-status" role="status"></div>
+      <section class="social-columns">
+        <div class="social-card request-card">
+          <div class="card-heading">
+            <div>
+              <span class="eyebrow">BUSCAR POR NOMBRE</span>
+              <h2>Invita al parche</h2>
+            </div>
+            <span class="heading-icon">＋</span>
+          </div>
+          <form id="friend-form" class="friend-form">
+            <label class="visually-hidden" for="friend-username">Nombre del jugador</label>
+            <input
+              id="friend-username"
+              class="form-control"
+              placeholder="NOMBRE DE JUGADOR"
+              maxlength="18"
+              autocomplete="off"
+            />
+            <button class="btn btn-acid" type="submit">ENVIAR SOLICITUD</button>
+          </form>
+          <p id="request-feedback" class="feedback" aria-live="polite"></p>
+          <div class="subsection-heading">
+            <span class="eyebrow">SOLICITUDES RECIBIDAS</span>
+            <span id="request-count" class="tiny-count">0</span>
+          </div>
+          <div id="request-list" class="request-list"></div>
+        </div>
+        <div class="social-card friends-card">
+          <div class="card-heading">
+            <div>
+              <span class="eyebrow">JUGADORES DE CONFIANZA</span>
+              <h2>Tu cuadrilla</h2>
+            </div>
+            <span id="friend-count" class="heading-count">0 AMIGOS</span>
+          </div>
+          <label class="mode-label" for="invite-mode">INVITAR A</label>
+          <select id="invite-mode" class="form-select">
+            <option value="combat">Combate · Tejados de Bogotá</option>
+            <option value="parkour">Parkour · Azoteas de Medellín</option>
+          </select>
+          <div id="friend-list" class="friend-list"></div>
+        </div>
+      </section>
+      <section class="incoming-invites">
+        <div class="subsection-heading">
+          <div>
+            <span class="eyebrow">LLAMADOS A PARTIDA</span>
+            <h2>Invitaciones</h2>
+          </div>
+          <span class="invite-pulse"></span>
+        </div>
+        <div id="invite-list" class="invite-list">
+          <p class="empty-copy">Esperando invitaciones del parche…</p>
+        </div>
+      </section>
+    </main>
+    <footer class="social-footer">
+      <span>PRESENCIA ACTUALIZADA EN TIEMPO REAL</span>
+      <span>CREADO POR YILDER RODRIGUEZ</span>
+    </footer>
+    <script type="module" src="./js/screens/social.js"></script>
+  </body>
+</html>

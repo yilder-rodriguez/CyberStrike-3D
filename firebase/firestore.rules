@@ -1,0 +1,215 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.role == 'admin';
+    }
+
+    function hasPermission(permission) {
+      return isAdmin()
+        || (signedIn() && request.auth.token.permissions is list
+          && (request.auth.token.permissions.hasAny(['*', permission])));
+    }
+
+    function ownsProfile(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function validCodeReward(userId) {
+      let codeId = request.resource.data.get('lastRedeemedCode', '');
+      let redemptionPath = /databases/$(database)/documents/users/$(userId)/redemptions/$(codeId);
+      return codeId is string
+        && !exists(redemptionPath)
+        && existsAfter(redemptionPath)
+        && getAfter(redemptionPath).data.uid == userId
+        && request.resource.data.coins == resource.data.get('coins', 0) + getAfter(redemptionPath).data.coins
+        && request.resource.data.gems == resource.data.get('gems', 0) + getAfter(redemptionPath).data.gems
+        && request.resource.data.inventory.hasAll(getAfter(redemptionPath).data.items);
+    }
+
+    function validEquippedItems() {
+      let equipped = request.resource.data.get('equipped', {});
+      let inventory = request.resource.data.get('inventory', []);
+      return equipped is map
+        && equipped.keys().hasOnly(['skin', 'weapon'])
+        && (equipped.get('skin', null) == null || (equipped.get('skin', null) is string && equipped.get('skin', '').matches('^skin_[A-Za-z0-9_]+$') && inventory.hasAny([equipped.get('skin', null)])))
+        && (equipped.get('weapon', null) == null || (equipped.get('weapon', null) is string && equipped.get('weapon', '').matches('^gun_[A-Za-z0-9_]+$') && inventory.hasAny([equipped.get('weapon', null)])));
+    }
+    function validPublicProfile(userId) {
+      let profilePath = /databases/$(database)/documents/users/$(userId);
+      return request.resource.data.keys().hasOnly(['uid', 'username', 'level', 'rankPoints', 'rankName', 'updatedAt'])
+        && request.resource.data.uid == userId
+        && existsAfter(profilePath)
+        && request.resource.data.username == getAfter(profilePath).data.username
+        && request.resource.data.level == getAfter(profilePath).data.level
+        && request.resource.data.rankPoints == getAfter(profilePath).data.rankPoints
+        && request.resource.data.rankName is string
+        && request.resource.data.updatedAt is string;
+    }
+
+    function validFriendSummary(friendUid) {
+      let profilePath = /databases/$(database)/documents/publicProfiles/$(friendUid);
+      return request.resource.data.keys().hasOnly(['uid', 'username', 'level', 'rankPoints', 'rankName', 'since'])
+        && request.resource.data.uid == friendUid
+        && exists(profilePath)
+        && request.resource.data.username == get(profilePath).data.username
+        && request.resource.data.level == get(profilePath).data.level
+        && request.resource.data.rankName == get(profilePath).data.rankName
+        && request.resource.data.rankPoints == get(profilePath).data.rankPoints
+        && request.resource.data.since is string;
+    }
+
+    match /publicProfiles/{userId} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create, update: if ownsProfile(userId) && validPublicProfile(userId);
+      allow delete: if false;
+    }
+    match /usernames/{username} {
+      // El registro de nombre solo permite consultar una coincidencia exacta.
+      allow get: if true;
+      allow list: if false;
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.username is string;
+      allow update, delete: if false;
+    }
+
+    match /codes/{codeId} {
+      allow get: if signedIn();
+      allow list: if hasPermission('codes.read');
+      allow create, delete: if hasPermission('codes.manage');
+      allow update: if hasPermission('codes.manage') || (
+        signedIn()
+        && resource.data.active == true
+        && resource.data.expiresAt > request.time
+        && resource.data.uses < resource.data.maxUses
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['uses'])
+        && request.resource.data.uses == resource.data.uses + 1
+        && existsAfter(/databases/$(database)/documents/users/$(request.auth.uid)/redemptions/$(codeId))
+      );
+    }
+
+    match /users/{userId} {
+      allow get: if ownsProfile(userId) || isAdmin();
+      // El directorio completo solo se puede consultar con el custom claim admin.
+      allow list: if isAdmin();
+      allow create: if ownsProfile(userId)
+        && request.resource.data.uid == userId
+        && request.resource.data.role == 'jugador'
+        && request.resource.data.dataConsentVersion == '1.0.0'
+        && request.resource.data.dataConsentAt is string;
+      allow update: if isAdmin() || (
+        ownsProfile(userId)
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.username == resource.data.username
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'settings', 'progressionVersion', 'level', 'xp', 'rankPoints',
+          'seasonId', 'seasonNumber', 'seasonHighestRank', 'seasonHistory', 'matchesLost',
+          'coins', 'gems', 'lastRedeemedCode', 'inventory', 'collection', 'equipped', 'quitCount', 'lastSeenAt', 'dataConsentVersion', 'dataConsentAt'
+        ])
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['dataConsentVersion', 'dataConsentAt'])
+          || (request.resource.data.dataConsentVersion == '1.0.0' && request.resource.data.dataConsentAt is string))
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['lastSeenAt']) || (request.resource.data.lastSeenAt is int && request.resource.data.lastSeenAt >= resource.data.get('lastSeenAt', 0)))
+        && request.resource.data.level <= 20
+        && request.resource.data.level >= resource.data.get('level', 0)
+        && request.resource.data.level <= resource.data.get('level', 0) + 6
+        && request.resource.data.xp >= resource.data.get('xp', 0)
+        && request.resource.data.xp <= resource.data.get('xp', 0) + 600
+        && request.resource.data.coins >= 0
+        && request.resource.data.coins <= resource.data.get('coins', 0) + 3500
+        && request.resource.data.gems >= 0
+        && (request.resource.data.gems <= resource.data.get('gems', 0) || validCodeReward(userId))
+        && request.resource.data.rankPoints >= 0
+        && request.resource.data.rankPoints <= resource.data.get('rankPoints', 0) + 150
+        && request.resource.data.matchesLost >= resource.data.get('matchesLost', 0)
+        && request.resource.data.matchesLost <= resource.data.get('matchesLost', 0) + 1
+        && (request.resource.data.rankPoints >= resource.data.get('rankPoints', 0)
+          || (request.resource.data.seasonId != resource.data.get('seasonId', '')
+            && request.resource.data.seasonHistory.size() > resource.data.get('seasonHistory', []).size())
+          || (request.resource.data.quitCount == resource.data.get('quitCount', 0) + 1
+            && request.resource.data.rankPoints >= resource.data.get('rankPoints', 0) - 30)
+          || (request.resource.data.matchesLost == resource.data.get('matchesLost', 0) + 1
+            && ((resource.data.get('rankPoints', 0) >= 10
+                && request.resource.data.rankPoints == resource.data.get('rankPoints', 0) - 10)
+              || (resource.data.get('rankPoints', 0) < 10 && request.resource.data.rankPoints == 0))))
+        && validEquippedItems()
+        && request.resource.data.inventory.hasAll(resource.data.get('inventory', []))
+        && request.resource.data.inventory.size() <= resource.data.get('inventory', []).size() + 3
+        && request.resource.data.collection.hasAll(resource.data.get('collection', []))
+        && request.resource.data.collection.size() <= resource.data.get('collection', []).size() + 3
+        && request.resource.data.seasonHistory.hasAll(resource.data.get('seasonHistory', []))
+        && request.resource.data.seasonHistory.size() <= resource.data.get('seasonHistory', []).size() + 100
+      );
+      allow delete: if isAdmin();
+
+      match /friendRequests/{senderUid} {
+        allow get, list: if ownsProfile(userId);
+        allow create: if signedIn()
+          && senderUid == request.auth.uid
+          && senderUid != userId
+          && request.resource.data.keys().hasOnly(['senderUid', 'senderName', 'sentAt'])
+          && request.resource.data.senderUid == request.auth.uid
+          && request.resource.data.senderName == get(/databases/$(database)/documents/publicProfiles/$(request.auth.uid)).data.username
+          && request.resource.data.sentAt is string
+          && exists(/databases/$(database)/documents/publicProfiles/$(userId))
+          && !exists(/databases/$(database)/documents/users/$(userId)/friends/$(senderUid));
+        allow delete: if ownsProfile(userId) || (signedIn() && request.auth.uid == senderUid);
+        allow update: if false;
+      }
+
+      match /friends/{friendUid} {
+        allow get, list: if ownsProfile(userId);
+        allow create: if (ownsProfile(userId) && validFriendSummary(friendUid))
+          || (signedIn()
+            && request.auth.uid == friendUid
+            && validFriendSummary(friendUid)
+            && existsAfter(/databases/$(database)/documents/users/$(friendUid)/friends/$(userId))
+            && exists(/databases/$(database)/documents/users/$(friendUid)/friendRequests/$(userId))
+            && !existsAfter(/databases/$(database)/documents/users/$(friendUid)/friendRequests/$(userId)));
+        allow update: if false;
+        allow delete: if ownsProfile(userId)
+          || (signedIn()
+            && resource.data.uid == request.auth.uid
+            && !existsAfter(/databases/$(database)/documents/users/$(userId)/friends/$(request.auth.uid)));
+      }
+      match /redemptions/{codeId} {
+        allow get, list: if ownsProfile(userId) || hasPermission('codes.read');
+        allow create: if ownsProfile(userId)
+          && !exists(/databases/$(database)/documents/users/$(userId)/redemptions/$(codeId))
+          && exists(/databases/$(database)/documents/codes/$(codeId))
+          && get(/databases/$(database)/documents/codes/$(codeId)).data.active == true
+          && get(/databases/$(database)/documents/codes/$(codeId)).data.expiresAt > request.time
+          && get(/databases/$(database)/documents/codes/$(codeId)).data.uses < get(/databases/$(database)/documents/codes/$(codeId)).data.maxUses
+          && request.resource.data.uid == userId
+          && request.resource.data.codeId == codeId
+          && request.resource.data.coins == get(/databases/$(database)/documents/codes/$(codeId)).data.reward.coins
+          && request.resource.data.gems == get(/databases/$(database)/documents/codes/$(codeId)).data.reward.gems
+          && request.resource.data.items == get(/databases/$(database)/documents/codes/$(codeId)).data.reward.items
+          && request.resource.data.items.size() <= 3
+          && getAfter(/databases/$(database)/documents/codes/$(codeId)).data.uses == get(/databases/$(database)/documents/codes/$(codeId)).data.uses + 1
+          && getAfter(/databases/$(database)/documents/users/$(userId)).data.coins == get(/databases/$(database)/documents/users/$(userId)).data.coins + request.resource.data.coins
+          && getAfter(/databases/$(database)/documents/users/$(userId)).data.gems == get(/databases/$(database)/documents/users/$(userId)).data.gems + request.resource.data.gems;
+        allow update, delete: if false;
+      }
+    }
+
+    match /gameContent/{contentId} {
+      allow get, list: if signedIn();
+      allow create, update, delete: if hasPermission('content.manage');
+    }
+
+    match /roles/{roleId} {
+      allow get, list: if signedIn() && hasPermission('roles.assign');
+      // Las definiciones se editan mediante callable functions con Admin SDK.
+      allow create, update, delete: if false;
+    }
+
+    // Sin reglas explícitas, las colecciones futuras quedan cerradas por defecto.
+  }
+}

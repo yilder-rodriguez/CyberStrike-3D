@@ -1,0 +1,43 @@
+// Curvas de IA ajustadas al puntaje de rango del jugador.
+window.CYBER_BOT_TIERS = [
+  {
+    min: 0,
+    label: 'Tonto',
+    speed: 0.045,
+    health: 1,
+    damage: 5,
+    shotEvery: 105,
+    spread: 0.42,
+    reaction: 50,
+  },
+  {
+    min: 900,
+    label: 'Medio Tonto',
+    speed: 0.055,
+    health: 2,
+    damage: 7,
+    shotEvery: 85,
+    spread: 0.3,
+    reaction: 38,
+  },
+  {
+    min: 2200,
+    label: 'Semi Tonto',
+    speed: 0.067,
+    health: 2,
+    damage: 9,
+    shotEvery: 68,
+    spread: 0.21,
+    reaction: 28,
+  },
+  {
+    min: 4500,
+    label: 'Un Poco Tonto',
+    speed: 0.078,
+    health: 3,
+    damage: 11,
+    shotEvery: 55,
+    spread: 0.14,
+    reaction: 20,
+  },
+];

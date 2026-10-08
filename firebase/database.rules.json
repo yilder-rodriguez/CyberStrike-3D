@@ -1,0 +1,34 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "presence": {
+      "$uid": {
+        ".read": "auth != null",
+        "$connectionId": {
+          ".write": "auth != null && auth.uid === $uid",
+          ".validate": "newData.hasChildren(['username', 'state', 'updatedAt']) && newData.child('username').isString() && newData.child('username').val().length <= 18 && newData.child('state').val() === 'online' && newData.child('updatedAt').isNumber()"
+        }
+      }
+    },
+    "gameInvites": {
+      "$targetUid": {
+        ".read": "auth != null && auth.uid === $targetUid",
+        "$inviteId": {
+          ".write": "auth != null && ((!data.exists() && newData.child('fromUid').val() === auth.uid && newData.child('status').val() === 'pending') || (data.exists() && auth.uid === $targetUid && data.child('status').val() === 'pending' && newData.child('fromUid').val() === data.child('fromUid').val() && newData.child('fromName').val() === data.child('fromName').val() && newData.child('mode').val() === data.child('mode').val() && newData.child('mapId').val() === data.child('mapId').val() && newData.child('createdAt').val() === data.child('createdAt').val() && (newData.child('status').val() === 'accepted' || newData.child('status').val() === 'rejected')) || (data.exists() && !newData.exists() && auth.uid === data.child('fromUid').val()))",
+          ".validate": "newData.hasChildren(['fromUid', 'fromName', 'mode', 'mapId', 'createdAt', 'status']) && newData.child('fromUid').isString() && newData.child('fromName').isString() && newData.child('fromName').val().length <= 18 && (newData.child('mode').val() === 'combat' || newData.child('mode').val() === 'parkour') && newData.child('mapId').isString() && newData.child('mapId').val().length <= 48 && newData.child('createdAt').isNumber() && (newData.child('status').val() === 'pending' || newData.child('status').val() === 'accepted' || newData.child('status').val() === 'rejected')"
+        }
+      }
+    },
+    "matches": {
+      "$room": {
+        "players": {
+          ".read": "auth != null",
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid"
+          }
+        }
+      }
+    }
+  }
+}

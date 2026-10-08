@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#090d0c" />
+    <title>Casillero | CyberStrike 3D</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link href="./css/inventario.css" rel="stylesheet" />
+  </head>
+  <body class="locker-page">
+    <header class="locker-top">
+      <a href="./menu.html" class="back-link">
+        ←
+        <span>EL PARCHE</span>
+      </a>
+      <div class="page-brand">
+        <span>CYBERSTRIKE / EQUIPO</span>
+        <h1>
+          EL
+          <em>CASILLERO</em>
+        </h1>
+      </div>
+      <a class="switch-link" href="./coleccion.html">COLECCIÓN ↗</a>
+    </header>
+    <main class="container-fluid locker-layout">
+      <section class="operator-panel">
+        <span class="eyebrow">VISTA DEL OPERADOR</span>
+        <h2 id="operator-name">Tu pinta</h2>
+        <p class="operator-sub">El equipo que llevas a la calle.</p>
+        <div id="inventory-preview" class="operator-stage"><div class="stage-grid"></div></div>
+        <div class="loadout-slots">
+          <div>
+            <small>TRAJE ACTIVO</small>
+            <strong id="equipped-skin">Sin equipar</strong>
+            <button data-unequip="skin" class="unequip-btn">QUITAR</button>
+          </div>
+          <div>
+            <small>ARMA ACTIVA</small>
+            <strong id="equipped-weapon">Sin equipar</strong>
+            <button data-unequip="weapon" class="unequip-btn">QUITAR</button>
+          </div>
+        </div>
+        <p class="equip-status" id="equip-status" role="status"></p>
+      </section>
+      <section class="inventory-panel">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">LO QUE HAS CONSEGUIDO</span>
+            <h2>Tu equipo</h2>
+          </div>
+          <span id="item-count" class="count-chip">0 ARTÍCULOS</span>
+        </div>
+        <div class="inventory-filters" role="tablist">
+          <button class="filter-btn active" data-filter="all">TODO</button>
+          <button class="filter-btn" data-filter="skin">TRAJES</button>
+          <button class="filter-btn" data-filter="weapon">ARMAS</button>
+          <button class="filter-btn" data-filter="other">OTROS</button>
+        </div>
+        <div id="inventory-grid" class="row g-3"></div>
+      </section>
+    </main>
+    <footer class="locker-footer">
+      <span>PROGRESO GUARDADO EN TU CUENTA</span>
+      <span>CREADO POR YILDER RODRIGUEZ</span>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script type="module" src="./js/screens/inventory.js"></script>
+  </body>
+</html>

@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#080d0a" />
+    <title>Control de parche | CyberStriker 3D</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/admin.css" />
+  </head>
+  <body class="admin-page">
+    <main class="container py-4 py-lg-5">
+      <header class="admin-topbar d-flex align-items-center justify-content-between gap-3 mb-5">
+        <a class="admin-brand" href="./menu.html">
+          CS
+          <span>/3D</span>
+        </a>
+        <span class="admin-owner">
+          CREADO POR
+          <b>YILDER RODRIGUEZ</b>
+        </span>
+        <a class="btn btn-outline-light btn-sm" href="./menu.html">← VOLVER AL LOBBY</a>
+      </header>
+      <section
+        class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-3 mb-4"
+      >
+        <div>
+          <p class="admin-kicker mb-2">CENTRO DE CONTROL // ACCESO RESTRINGIDO</p>
+          <h1 class="admin-title mb-0">
+            CONTROL
+            <em>DEL PARCHE</em>
+          </h1>
+        </div>
+        <div class="admin-total">
+          <strong id="player-count">—</strong>
+          <span>JUGADORES</span>
+        </div>
+      </section>
+      <nav class="admin-tabs nav nav-pills flex-nowrap mb-4" aria-label="Secciones administrativas">
+        <button class="nav-link active" data-admin-tab="players" data-permission="players.read" type="button">JUGADORES</button>
+        <button class="nav-link" data-admin-tab="codes" data-permission="codes.read" type="button">CÓDIGOS</button>
+        <button class="nav-link" data-admin-tab="gifts" data-permission="economy.gift" type="button">REGALOS</button>
+        <button class="nav-link" data-admin-tab="content" data-permission="content.manage" type="button">CATÁLOGO</button>
+        <button class="nav-link" data-admin-tab="season" data-permission="season.manage" type="button">TEMPORADA</button>
+        <button class="nav-link d-none" id="roles-tab" data-admin-tab="roles" type="button">ROLES Y PERMISOS</button>
+      </nav>
+      <section class="admin-pane" data-admin-pane="players" data-permission="players.read">
+        <section class="admin-toolbar row g-2 mb-3" aria-label="Filtros de jugadores">
+          <div class="col-12 col-md">
+            <label class="visually-hidden" for="player-search">Buscar jugador</label>
+            <input
+              class="form-control"
+              id="player-search"
+              type="search"
+              placeholder="Buscar por nombre o identificador"
+            />
+          </div>
+          <div class="col-12 col-sm-6 col-md-3">
+            <label class="visually-hidden" for="role-filter">Filtrar por rol</label>
+            <select class="form-select" id="role-filter">
+              <option value="">Todos los roles</option>
+              <option value="admin">Admin</option>
+              <option value="moderador">Moderador</option>
+              <option value="jugador">Jugador</option>
+            </select>
+          </div>
+          <div class="col-12 col-sm-6 col-md-auto">
+            <button class="btn btn-acid w-100" id="refresh-players" type="button">
+              ACTUALIZAR LISTA
+            </button>
+          </div>
+        </section>
+        <p id="admin-status" class="admin-status" role="status">Cargando el directorio…</p>
+        <section class="player-table-wrap" aria-label="Jugadores registrados">
+          <div class="table-responsive">
+            <table class="table player-table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>JUGADOR</th>
+                  <th>ROL</th>
+                  <th>NIVEL</th>
+                  <th>RANGO</th>
+                  <th>MONEDAS</th>
+                  <th>ESMERALDAS</th>
+                  <th>ÚLTIMA CONEXIÓN</th>
+                  <th>PERMISOS</th>
+                </tr>
+              </thead>
+              <tbody id="players-body"></tbody>
+            </table>
+          </div>
+        </section>
+        <p class="admin-foot mt-3 mb-0">
+          La lista muestra solo datos de perfil necesarios para administrar el juego. Contraseñas y
+          credenciales nunca se consultan.
+        </p>
+      </section>
+      <section class="admin-pane d-none" data-admin-pane="codes" data-permission="codes.read">
+        <div class="admin-panel mb-4">
+          <p class="admin-kicker">DISTRIBUCIÓN DE RECOMPENSAS</p>
+          <h2>CÓDIGO NUEVO / EDICIÓN</h2>
+          <form id="code-form" class="row g-3">
+            <div class="col-12 col-md-4">
+              <label for="code-id">Código</label>
+              <input
+                id="code-id"
+                class="form-control"
+                minlength="3"
+                maxlength="32"
+                required
+                placeholder="PARCHE-2026"
+              />
+            </div>
+            <div class="col-6 col-md-2">
+              <label for="code-max-uses">Usos máximos</label>
+              <input
+                id="code-max-uses"
+                class="form-control"
+                type="number"
+                min="1"
+                max="100000"
+                value="1"
+                required
+              />
+            </div>
+            <div class="col-6 col-md-3">
+              <label for="code-expires">Vence</label>
+              <input id="code-expires" class="form-control" type="datetime-local" required />
+            </div>
+            <div class="col-6 col-md-1">
+              <label for="code-coins">Monedas</label>
+              <input id="code-coins" class="form-control" type="number" min="0" value="0" />
+            </div>
+            <div class="col-6 col-md-2">
+              <label for="code-gems">Esmeraldas</label>
+              <input id="code-gems" class="form-control" type="number" min="0" value="0" />
+            </div>
+            <div class="col-12">
+              <label for="code-items">Artículos (IDs separados por coma, máximo 3)</label>
+              <input
+                id="code-items"
+                class="form-control"
+                list="admin-item-ids"
+                placeholder="skin_crimson, gun_red"
+              />
+            </div>
+            <div class="col-12 d-flex align-items-center gap-3">
+              <button class="btn btn-acid" type="submit">GUARDAR CÓDIGO</button>
+              <span id="code-feedback" class="admin-status" role="status"></span>
+            </div>
+          </form>
+        </div>
+        <div class="player-table-wrap table-responsive">
+          <table class="table player-table align-middle mb-0">
+            <thead>
+              <tr>
+                <th>CÓDIGO</th>
+                <th>PREMIO</th>
+                <th>USOS</th>
+                <th>VIGENCIA</th>
+                <th>ESTADO</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
+            <tbody id="codes-body"></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="admin-pane d-none" data-admin-pane="gifts" data-permission="economy.gift">
+        <div class="admin-panel">
+          <p class="admin-kicker">PREMIOS CON REGISTRO EN COLECCIÓN</p>
+          <h2>ENVIAR REGALO</h2>
+          <form id="gift-form" class="row g-3">
+            <div class="col-12 col-md-6">
+              <label for="gift-player">Jugador</label>
+              <select id="gift-player" class="form-select" required>
+                <option value="">Carga el directorio primero</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-2">
+              <label for="gift-coins">Monedas</label>
+              <input
+                id="gift-coins"
+                class="form-control"
+                type="number"
+                min="0"
+                max="1000000"
+                value="0"
+              />
+            </div>
+            <div class="col-6 col-md-2">
+              <label for="gift-gems">Esmeraldas</label>
+              <input
+                id="gift-gems"
+                class="form-control"
+                type="number"
+                min="0"
+                max="10000"
+                value="0"
+              />
+            </div>
+            <div class="col-12">
+              <label for="gift-items">Artículos (IDs separados por coma, máximo 3)</label>
+              <input
+                id="gift-items"
+                class="form-control"
+                list="admin-item-ids"
+                placeholder="skin_crimson, gun_red"
+              />
+            </div>
+            <div class="col-12 d-flex align-items-center gap-3">
+              <button class="btn btn-acid" type="submit">CONFIRMAR REGALO</button>
+              <span id="gift-feedback" class="admin-status" role="status"></span>
+            </div>
+          </form>
+        </div>
+      </section>
+      <section class="admin-pane d-none" data-admin-pane="content" data-permission="content.manage">
+        <div class="admin-panel">
+          <p class="admin-kicker">CONTENIDO DINÁMICO // FIRESTORE</p>
+          <h2>CATÁLOGO Y RULETAS</h2>
+          <h3 class="content-subtitle">PRODUCTO DE TIENDA</h3>
+          <form id="catalog-item-form" class="row g-3 mb-4">
+            <div class="col-12 col-md-3">
+              <label for="item-id">ID del producto</label>
+              <input
+                id="item-id"
+                class="form-control"
+                required
+                maxlength="48"
+                placeholder="skin-chaqueta-rolo"
+              />
+            </div>
+            <div class="col-12 col-md-3">
+              <label for="item-name">Nombre visible</label>
+              <input id="item-name" class="form-control" required maxlength="60" />
+            </div>
+            <div class="col-12 col-md-3">
+              <label for="item-category">Categoría</label>
+              <select id="item-category" class="form-select">
+                <option value="skin">Pinta</option>
+                <option value="weapon">Arma</option>
+                <option value="bundle">Paquete</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-3">
+              <label for="item-rarity">Rareza</label>
+              <select id="item-rarity" class="form-select">
+                <option>Tonta</option>
+                <option>Fenómena</option>
+                <option>Especial</option>
+                <option>Berraca</option>
+                <option>Estúpida</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label for="item-description">Descripción</label>
+              <input id="item-description" class="form-control" maxlength="240" />
+            </div>
+            <div class="col-6 col-md-2">
+              <label for="item-currency">Moneda</label>
+              <select id="item-currency" class="form-select">
+                <option value="coins">Monedas</option>
+                <option value="gems">Esmeraldas</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-2">
+              <label for="item-price">Precio</label>
+              <input id="item-price" class="form-control" type="number" min="0" value="0" />
+            </div>
+            <div class="col-12 col-md-2">
+              <label for="item-color">Color</label>
+              <input
+                id="item-color"
+                class="form-control form-control-color"
+                type="color"
+                value="#c9ff38"
+              />
+            </div>
+            <div class="col-12 col-md-6">
+              <label for="item-ids">Artículos entregados (IDs separados por coma)</label>
+              <input
+                id="item-ids"
+                class="form-control"
+                list="admin-item-ids"
+                required
+                placeholder="skin_crimson"
+              />
+            </div>
+            <div class="col-12">
+              <button class="btn btn-acid" type="submit">AÑADIR / ACTUALIZAR PRODUCTO</button>
+            </div>
+          </form>
+          <div class="player-table-wrap table-responsive mb-4">
+            <table class="table player-table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>PRODUCTO</th>
+                  <th>CATEGORÍA</th>
+                  <th>PRECIO</th>
+                  <th>ACCIONES</th>
+                </tr>
+              </thead>
+              <tbody id="catalog-items"></tbody>
+            </table>
+          </div>
+          <h3 class="content-subtitle">AJUSTE AVANZADO</h3>
+          <div class="row g-3">
+            <div class="col-12 col-xl-6">
+              <label for="content-catalog">Artículos de tienda (JSON)</label>
+              <textarea
+                id="content-catalog"
+                class="form-control content-editor"
+                spellcheck="false"
+              ></textarea>
+            </div>
+            <div class="col-12 col-xl-6">
+              <label for="content-roulette">Ruletas y probabilidades (JSON)</label>
+              <textarea
+                id="content-roulette"
+                class="form-control content-editor"
+                spellcheck="false"
+              ></textarea>
+            </div>
+            <div class="col-12">
+              <label for="content-maps">
+                Mapas (JSON) · nombre, modo, colores, niebla, límites y meta
+              </label>
+              <textarea
+                id="content-maps"
+                class="form-control content-editor"
+                spellcheck="false"
+              ></textarea>
+            </div>
+            <div class="col-12 d-flex align-items-center gap-3">
+              <button id="save-content" class="btn btn-acid" type="button">
+                PUBLICAR CONTENIDO
+              </button>
+              <span id="content-feedback" class="admin-status" role="status"></span>
+            </div>
+          </div>
+          <p class="admin-foot mt-3 mb-0">
+            Los cambios publicados se cargan al iniciar tienda, ruleta o partida. El editor ajusta
+            parámetros del mapa; las geometrías especiales siguen definidas por el motor.
+          </p>
+        </div>
+      </section>
+      <datalist id="admin-item-ids"></datalist>
+      <section class="admin-pane d-none" data-admin-pane="season" data-permission="season.manage">
+        <div class="admin-panel">
+          <p class="admin-kicker">CALENDARIO COMPARTIDO</p>
+          <h2>AJUSTES DE TEMPORADA</h2>
+          <form id="season-form" class="row g-3">
+            <div class="col-12 col-md-4">
+              <label for="season-start">Fecha inicial base</label>
+              <input id="season-start" class="form-control" type="datetime-local" required />
+            </div>
+            <div class="col-6 col-md-2">
+              <label for="season-type">Ciclo</label>
+              <select id="season-type" class="form-select">
+                <option value="days">Días</option>
+                <option value="month">Mes</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-2">
+              <label for="season-days">Días</label>
+              <input
+                id="season-days"
+                class="form-control"
+                type="number"
+                min="1"
+                max="90"
+                value="15"
+              />
+            </div>
+            <div class="col-12 col-md-2">
+              <label for="season-reset">Reinicio de puntos %</label>
+              <input
+                id="season-reset"
+                class="form-control"
+                type="number"
+                min="0"
+                max="90"
+                value="40"
+              />
+            </div>
+            <div class="col-12 col-md-2 d-flex align-items-end">
+              <button class="btn btn-acid w-100" type="submit">GUARDAR</button>
+            </div>
+            <div class="col-12 d-flex flex-wrap align-items-center gap-3">
+              <button class="btn btn-outline-warning" id="force-season" type="button">
+                CERRAR ESTA Y ABRIR LA SIGUIENTE
+              </button>
+              <span id="season-feedback" class="admin-status" role="status"></span>
+            </div>
+          </form>
+          <p class="admin-foot mt-3 mb-0">
+            El calendario aplica el cambio al jugador cuando su perfil se sincroniza. El historial y
+            las medallas se conservan; no borres perfiles para reiniciar una temporada.
+          </p>
+        </div>
+      </section>
+      <section class="admin-pane d-none" data-admin-pane="roles">
+        <div class="admin-panel">
+          <p class="admin-kicker">ACCESO POR RESPONSABILIDAD</p>
+          <h2>ROLES Y PERMISOS</h2>
+          <p class="admin-foot">El rol raíz administra el sistema. Los roles que crees solo reciben las capacidades seleccionadas y no pueden crear administradores. Regalos y asignación de roles requieren también «Ver jugadores»; administrar códigos requiere «Ver códigos».</p>
+          <form id="role-form" class="row g-3 mb-4">
+            <div class="col-12 col-md-3"><label for="role-id">ID del rol</label><input id="role-id" class="form-control" required maxlength="32" pattern="[a-z][a-z0-9_-]{1,31}" placeholder="moderador-chat" /></div>
+            <div class="col-12 col-md-3"><label for="role-name">Nombre visible</label><input id="role-name" class="form-control" required maxlength="32" placeholder="Moderador del parche" /></div>
+            <div class="col-12 col-md-6"><label class="d-block">Permisos</label>
+              <div class="row g-2 role-permissions">
+                <label class="col-6 col-lg-4"><input type="checkbox" value="players.read" /> Ver jugadores</label>
+                <label class="col-6 col-lg-4"><input type="checkbox" value="roles.assign" /> Asignar roles</label>
+                <label class="col-6 col-lg-4"><input type="checkbox" value="codes.read" /> Ver códigos</label>
+                <label class="col-6 col-lg-4"><input type="checkbox" value="codes.manage" /> Administrar códigos</label>
+                <label class="col-6 col-lg-4"><input type="checkbox" value="economy.gift" /> Enviar regalos</label>
+                <label class="col-6 col-lg-4"><input type="checkbox" value="content.manage" /> Editar catálogo</label>
+                <label class="col-6 col-lg-4"><input type="checkbox" value="season.manage" /> Gestionar temporadas</label>
+              </div>
+            </div>
+            <div class="col-12 d-flex align-items-center gap-3"><button class="btn btn-acid" type="submit">GUARDAR ROL</button><span id="role-feedback" class="admin-status" role="status"></span></div>
+          </form>
+          <div class="player-table-wrap table-responsive"><table class="table player-table align-middle mb-0"><thead><tr><th>ROL</th><th>PERMISOS</th><th>ACCIONES</th></tr></thead><tbody id="roles-body"></tbody></table></div>
+        </div>
+      </section>
+      <p class="admin-foot mt-4 mb-0">
+        Roles, recompensas y publicaciones requieren Firebase configurado. Las acciones
+        privilegiadas se comprueban con custom claims y reglas del servidor.
+      </p>
+    </main>
+    <script src="./js/data/maps.js"></script>
+    <script type="module" src="./js/screens/admin.js"></script>
+  </body>
+</html>

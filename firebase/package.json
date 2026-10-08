@@ -1,0 +1,12 @@
+{
+  "name": "cyberstriker-admin-seed",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "seed-admin": "node seed-admin.cjs",
+    "set-admin-password": "node set-admin-password.cjs"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.0"
+  }
+}

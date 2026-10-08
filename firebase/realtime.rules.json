@@ -1,0 +1,17 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "matches": {
+      "$match": {
+        "players": {
+          ".read": "auth != null",
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid",
+            ".validate": "newData.hasChildren(['uid','username','mode','map','x','z','updatedAt']) && newData.child('uid').val() === auth.uid && newData.child('x').isNumber() && newData.child('z').isNumber() && newData.child('updatedAt').isNumber()"
+          }
+        }
+      }
+    }
+  }
+}

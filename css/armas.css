@@ -1,0 +1,27 @@
+* { box-sizing: border-box; }
+body.arsenal-page { min-height: 100svh; margin: 0; color: #e8efe8; background: radial-gradient(ellipse at 82% 10%, #18241a, transparent 42%), #070b09; font-family: 'Barlow Condensed', sans-serif; }
+.arsenal-page main { max-width: 1180px; }
+.arsenal-top { min-height: 48px; border-bottom: 1px solid #314038; }
+.arsenal-back, .arsenal-market, .arsenal-heading > p, .arsenal-player, .arsenal-page footer, .weapon-type { font: 11px 'Share Tech Mono', monospace; letter-spacing: .09em; text-decoration: none; }
+.arsenal-back { color: #aab7ad; }
+.arsenal-market { color: #c9ff38; }
+.arsenal-heading { padding: clamp(35px, 8vw, 78px) 0 24px; }
+.arsenal-heading > p { color: #a0b29e; }
+.arsenal-heading h1 { margin: 0; font-size: clamp(54px, 11vw, 100px); font-weight: 900; line-height: .9; }
+.arsenal-heading h1 span { color: #c9ff38; }
+.arsenal-player { display: flex; flex-wrap: wrap; gap: 12px 28px; margin-top: 24px; color: #93a197; }
+.arsenal-player strong { color: #e8efe8; font-weight: 400; }
+.arsenal-player span { color: #c9ff38; }
+.arsenal-status { min-height: 22px; color: #c9ff38; font: 12px 'Share Tech Mono', monospace; }
+.weapon-card { position: relative; display: flex; min-height: 300px; flex-direction: column; padding: 20px; overflow: hidden; border: 1px solid #334138; background: linear-gradient(145deg, #111a14, #090e0b 68%); }
+.weapon-card::after { position: absolute; inset: 0 0 auto; height: 2px; background: var(--weapon-color, #c9ff38); content: ''; box-shadow: 0 0 18px var(--weapon-color, #c9ff38); }
+.weapon-visual { display: grid; height: 112px; place-items: center; margin-bottom: 17px; border: 1px solid #29372d; background: repeating-linear-gradient(135deg, transparent 0 15px, #ffffff08 16px 17px); color: var(--weapon-color, #c9ff38); }
+.weapon-visual span { font: 36px 'Share Tech Mono', monospace; transform: skew(-12deg); text-shadow: 0 0 20px currentColor; }
+.weapon-type { margin: 0; color: var(--weapon-color, #c9ff38); }
+.weapon-card h2 { margin: 6px 0; font-size: 30px; font-weight: 800; }
+.weapon-description { min-height: 42px; color: #a3afa6; font-size: 16px; }
+.weapon-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; color: #93a197; font: 10px 'Share Tech Mono', monospace; }
+.arsenal-action { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; padding: 0 12px; border: 1px solid #c9ff38; background: transparent; color: #c9ff38; font: 10px 'Share Tech Mono', monospace; text-decoration: none; }
+.arsenal-action:hover:not(:disabled) { background: #c9ff38; color: #0a100b; }
+.arsenal-action:disabled { opacity: .65; }
+.arsenal-page footer { margin-top: 44px; padding: 18px 0; border-top: 1px solid #28342d; color: #75827a; }

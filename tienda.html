@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#090d0c" />
+    <title>Mercado del Parche | CyberStrike 3D</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link href="./css/tienda.css" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="market-top">
+      <div class="container-fluid market-top-inner">
+        <a class="back-link" href="./menu.html">
+          ←
+          <span>VOLVER AL PARCHE</span>
+        </a>
+        <div class="market-brand">
+          <span class="brand-kicker">CYBERSTRIKE / BOGOTÁ DISTRITO 09</span>
+          <h1>
+            MERCADO
+            <em>DEL PARCHE</em>
+          </h1>
+        </div>
+        <div class="wallet" aria-label="Tu saldo">
+          <span>
+            🪙
+            <b id="shop-coins">0</b>
+          </span>
+          <span>
+            💚
+            <b id="shop-gems">0</b>
+          </span>
+        </div>
+      </div>
+    </header>
+    <main class="container-fluid market-layout">
+      <section class="preview-column">
+        <div class="preview-head">
+          <span class="eyebrow">VITRINA 3D · GIRA EL ARTÍCULO</span>
+          <h2 id="preview-title">Elige tu pinta</h2>
+          <p id="preview-category">Equipo del parche</p>
+        </div>
+        <div
+          id="shop-3d-preview"
+          class="preview-stage"
+          aria-label="Vista 3D del artículo seleccionado"
+        >
+          <div class="stage-grid"></div>
+          <div class="stage-scan"></div>
+        </div>
+        <div class="preview-foot">
+          <span id="preview-rarity">—</span>
+          <button id="btn-rotate-left" class="turn-btn" aria-label="Girar a la izquierda">↶</button>
+          <button id="btn-rotate-right" class="turn-btn" aria-label="Girar a la derecha">↷</button>
+        </div>
+        <p id="preview-description" class="preview-description">
+          Una pinta para moverse por la ciudad.
+        </p>
+        <button id="btn-equip-selected" class="btn btn-outline-light w-100" disabled>
+          ELIGE UN ARTÍCULO
+        </button>
+      </section>
+      <section class="catalog-column">
+        <div class="catalog-intro">
+          <div>
+            <span class="eyebrow">HECHO PARA LA CALLE, LISTO PARA EL COMBATE</span>
+            <h2>Arma tu estilo.</h2>
+          </div>
+          <span class="catalog-count" id="catalog-count">CATÁLOGO OFICIAL</span>
+        </div>
+        <div class="market-tabs" role="tablist" aria-label="Catálogo de la tienda">
+          <button class="market-tab active" data-market="all">TODO</button>
+          <button class="market-tab" data-market="coins">🪙 MONEDAS</button>
+          <button class="market-tab" data-market="gems">💚 ESMERALDAS</button>
+          <button class="market-tab" data-market="codes">🎟 CÓDIGOS</button>
+        </div>
+        <div id="code-panel" class="code-panel d-none">
+          <div>
+            <span class="eyebrow">RECOMPENSA DE LA CASA</span>
+            <h3>¿Tienes un código?</h3>
+            <p id="code-note">Los códigos oficiales se validan con el servidor del juego.</p>
+          </div>
+          <div class="code-entry">
+            <label class="visually-hidden" for="promo-code-input">Código promocional</label>
+            <input
+              id="promo-code-input"
+              class="form-control"
+              placeholder="ESCRIBE TU CÓDIGO"
+              maxlength="32"
+              autocomplete="off"
+            />
+            <button id="btn-redeem-code" class="btn btn-lime">CANJEAR</button>
+          </div>
+          <div id="code-feedback" class="code-feedback" role="status"></div>
+        </div>
+        <div id="shop-grid" class="row g-3"></div>
+      </section>
+    </main>
+    <footer class="market-footer">
+      <span>CYBERSTRIKE 3D · MERCADO SEGURO</span>
+      <span>CREADO POR YILDER RODRIGUEZ</span>
+    </footer>
+    <div class="modal fade" id="buyConfirmModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content confirm-modal">
+          <div class="modal-header">
+            <div>
+              <span class="eyebrow">CONFIRMA TU VUELTA</span>
+              <h2 class="modal-title">Adquirir artículo</h2>
+            </div>
+            <button
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <h3 id="modal-item-name"></h3>
+            <p>El artículo quedará en tu inventario y colección.</p>
+            <strong id="modal-item-price"></strong>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-outline-light" data-bs-dismiss="modal">VOLVER</button>
+            <button id="btn-confirm-purchase" class="btn btn-lime">CONFIRMAR</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script type="module" src="./js/screens/shop.js"></script>
+  </body>
+</html>

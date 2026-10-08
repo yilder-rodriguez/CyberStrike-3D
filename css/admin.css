@@ -1,0 +1,292 @@
+:root {
+  color-scheme: dark;
+  --acid: #c9ff38;
+  --ink: #080d0a;
+  --line: #344239;
+  --muted: #93a097;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: radial-gradient(ellipse at 88% 10%, #1c2c1c 0, transparent 35%), var(--ink);
+  color: #edf2e8;
+  font-family: 'Barlow Condensed', sans-serif;
+}
+.admin-brand {
+  font:
+    700 20px 'Share Tech Mono',
+    monospace;
+  color: #e4eadf;
+  text-decoration: none;
+}
+.admin-brand span {
+  color: var(--acid);
+}
+.admin-owner,
+.admin-kicker,
+.admin-status,
+.admin-foot,
+.admin-total span {
+  font:
+    11px 'Share Tech Mono',
+    monospace;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.admin-owner b {
+  color: #eef3e9;
+  font-weight: 400;
+}
+.admin-kicker {
+  color: var(--acid);
+}
+.admin-title {
+  font-size: clamp(38px, 7vw, 68px);
+  font-weight: 900;
+  line-height: 0.9;
+}
+.admin-title em {
+  font-style: normal;
+  color: var(--acid);
+}
+.admin-total {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  border-left: 2px solid var(--acid);
+  padding-left: 13px;
+}
+.admin-total strong {
+  font-size: 38px;
+  color: var(--acid);
+  line-height: 1;
+}
+.admin-toolbar .form-control,
+.admin-toolbar .form-select {
+  min-height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: #0b120e;
+  color: #eff3e9;
+}
+.admin-toolbar .form-control::placeholder {
+  color: #849187;
+}
+.btn-acid {
+  min-height: 46px;
+  border-radius: 0;
+  background: var(--acid);
+  color: #10160c;
+  font:
+    700 14px 'Share Tech Mono',
+    monospace;
+}
+.btn-acid:hover {
+  background: #dfff8b;
+  color: #10160c;
+}
+.player-table-wrap {
+  border: 1px solid var(--line);
+  background: #0a100de8;
+}
+.player-table {
+  --bs-table-bg: transparent;
+  --bs-table-color: #e9eee6;
+  --bs-table-border-color: #26332a;
+  min-width: 760px;
+}
+.player-table th {
+  padding: 15px 14px;
+  color: #94a398;
+  font:
+    10px 'Share Tech Mono',
+    monospace;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.player-table td {
+  padding: 14px;
+  font-size: 16px;
+}
+.player-table tbody tr:hover {
+  background: #c9ff380b;
+}
+.player-name {
+  font-weight: 700;
+  font-size: 19px;
+}
+.player-id {
+  display: block;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #768379;
+  font:
+    10px 'Share Tech Mono',
+    monospace;
+}
+.role-pill {
+  display: inline-block;
+  padding: 4px 8px;
+  border: 1px solid #59664f;
+  color: #c8d3c4;
+  font:
+    10px 'Share Tech Mono',
+    monospace;
+}
+.role-pill.admin {
+  border-color: #d1a94e;
+  color: #f0c663;
+}
+.rank-cell {
+  color: var(--acid);
+}
+.admin-status {
+  min-height: 20px;
+}
+.admin-status.error {
+  color: #ff927d;
+}
+.admin-foot {
+  letter-spacing: 0.03em;
+}
+@media (max-width: 575.98px) {
+  .admin-topbar {
+    flex-wrap: wrap;
+  }
+  .admin-owner {
+    order: 3;
+    width: 100%;
+  }
+  .admin-title {
+    font-size: 42px;
+  }
+  .admin-total {
+    margin-bottom: 4px;
+  }
+  .admin-page main {
+    padding-inline: 16px;
+  }
+}
+.admin-tabs {
+  gap: 8px;
+  overflow: auto;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+}
+.admin-tabs .nav-link {
+  border: 1px solid #354239;
+  border-radius: 0;
+  background: #0b120e;
+  color: #aab5aa;
+  white-space: nowrap;
+  font:
+    11px 'Share Tech Mono',
+    monospace;
+  letter-spacing: 0.08em;
+}
+.admin-tabs .nav-link.active {
+  background: var(--acid);
+  border-color: var(--acid);
+  color: #11170c;
+}
+.admin-panel {
+  border: 1px solid var(--line);
+  padding: clamp(16px, 3vw, 28px);
+  background: #0a100de8;
+}
+.admin-panel h2 {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 800;
+  margin-bottom: 22px;
+}
+.admin-panel label {
+  display: block;
+  margin-bottom: 6px;
+  color: #a8b4a8;
+  font:
+    10px 'Share Tech Mono',
+    monospace;
+  letter-spacing: 0.07em;
+}
+.admin-panel .form-control,
+.admin-panel .form-select {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: #080d0a;
+  color: #edf2e8;
+}
+.admin-panel .form-control:focus,
+.admin-panel .form-select:focus {
+  border-color: var(--acid);
+  box-shadow: 0 0 0 0.15rem #c9ff3825;
+}
+.content-editor {
+  height: 390px;
+  resize: vertical;
+  font:
+    12px/1.5 'Share Tech Mono',
+    monospace;
+  tab-size: 2;
+}
+.role-editor,
+.code-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 190px;
+}
+.role-editor .form-select {
+  min-width: 110px;
+  border-radius: 0;
+  background: #080d0a;
+  color: #eef3e9;
+  border-color: var(--line);
+}
+.code-actions {
+  flex-wrap: wrap;
+  min-width: 280px;
+}
+.code-actions .btn {
+  font-size: 11px;
+}
+.admin-pane {
+  animation: panel-in 0.2s ease-out;
+}
+@keyframes panel-in {
+  from {
+    opacity: 0.4;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.content-subtitle {
+  margin: 24px 0 16px;
+  color: #cfe6b8;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.form-control-color {
+  width: 100%;
+  max-width: none;
+  padding: 5px;
+}
+.role-permissions label {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--admin-muted, #a5afa7);
+  font-size: 0.88rem;
+}
+
+.role-permissions input {
+  accent-color: #c9ff38;
+}

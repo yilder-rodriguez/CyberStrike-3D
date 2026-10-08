@@ -1,0 +1,328 @@
+:root {
+  color-scheme: dark;
+  --ink: #090d0c;
+  --panel: #111816;
+  --line: #2b3730;
+  --lime: #c8fa58;
+  --muted: #91a098;
+  --paper: #e8eee8;
+  --mono: 'Share Tech Mono', monospace;
+  --display: 'Barlow Condensed', sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--display);
+  background-image: linear-gradient(90deg, transparent 49.9%, #1b251d 50%, transparent 50.1%);
+  background-size: 64px 64px;
+}
+.locker-top,
+.archive-top {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  min-height: 78px;
+  padding: 12px clamp(14px, 4vw, 56px);
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: center;
+  gap: 10px;
+  background: #090d0cf2;
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+}
+.back-link,
+.switch-link {
+  color: var(--lime);
+  text-decoration: none;
+  font: 12px var(--mono);
+  letter-spacing: 0.08em;
+}
+.switch-link {
+  text-align: right;
+}
+.page-brand {
+  text-align: center;
+}
+.page-brand span,
+.eyebrow {
+  font: 10px var(--mono);
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+.page-brand h1 {
+  margin: 4px 0 0;
+  font: 800 30px/1 var(--display);
+  letter-spacing: 0.08em;
+}
+.page-brand em {
+  color: var(--lime);
+  font-style: normal;
+}
+.locker-layout {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 30px clamp(14px, 4vw, 56px) 50px;
+  display: grid;
+  grid-template-columns: minmax(280px, 0.8fr) minmax(420px, 1.5fr);
+  gap: clamp(22px, 4vw, 58px);
+}
+.operator-panel {
+  position: sticky;
+  top: 106px;
+  align-self: start;
+  padding: 20px;
+  background: #101714;
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--lime);
+}
+.operator-panel h2,
+.section-heading h2,
+.collection-heading h2 {
+  font: 700 30px var(--display);
+  margin: 4px 0;
+}
+.operator-sub {
+  color: var(--muted);
+}
+.operator-stage {
+  height: clamp(240px, 31vw, 360px);
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 58%, #26382a 0, #111a15 38%, #0b100d 72%);
+  border: 1px solid #29382d;
+}
+.operator-stage canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.stage-grid {
+  position: absolute;
+  inset: 45% -20% -80%;
+  transform: perspective(200px) rotateX(55deg);
+  background-image:
+    linear-gradient(#a9e84a25 1px, transparent 1px),
+    linear-gradient(90deg, #a9e84a25 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.loadout-slots {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+.loadout-slots > div {
+  min-width: 0;
+  padding: 10px;
+  background: #0b100d;
+  border: 1px solid var(--line);
+}
+.loadout-slots small {
+  display: block;
+  color: var(--muted);
+  font: 9px var(--mono);
+}
+.loadout-slots strong {
+  display: block;
+  margin: 5px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: 600 17px var(--display);
+}
+.unequip-btn {
+  padding: 0;
+  background: none;
+  border: 0;
+  color: #dc8c71;
+  font: 9px var(--mono);
+}
+.equip-status {
+  min-height: 20px;
+  margin: 10px 0 0;
+  color: var(--lime);
+  font: 11px var(--mono);
+}
+.section-heading,
+.collection-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.section-heading h2 {
+  font-size: 38px;
+}
+.count-chip {
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font: 10px var(--mono);
+}
+.inventory-filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 18px;
+}
+.filter-btn {
+  padding: 10px 14px;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font: 600 13px var(--display);
+}
+.filter-btn.active,
+.filter-btn:hover {
+  color: var(--lime);
+  border-color: var(--lime);
+}
+.gear-card {
+  height: 100%;
+  padding: 13px;
+  background: #111816;
+  border: 1px solid var(--line);
+  transition:
+    transform 0.18s,
+    border-color 0.18s;
+}
+.gear-card.equipped {
+  border-color: var(--lime);
+  box-shadow: inset 0 2px var(--lime);
+}
+.gear-card:hover {
+  transform: translateY(-3px);
+}
+.gear-art {
+  height: 84px;
+  margin-bottom: 12px;
+  position: relative;
+  background:
+    radial-gradient(ellipse at center, var(--gear-color, #c8fa58) 40, transparent 70%),
+    linear-gradient(135deg, #1a251e, #0c110e);
+}
+.gear-art:after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(120deg, transparent 0 14px, #ffffff09 15px 16px);
+}
+.gear-kind,
+.gear-rarity {
+  font: 9px var(--mono);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.gear-card h3 {
+  min-height: 42px;
+  margin: 6px 0;
+  font: 700 20px/1 var(--display);
+}
+.gear-card button {
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 0;
+  font: 10px var(--mono);
+}
+.empty-state {
+  grid-column: 1/-1;
+  padding: 32px 18px;
+  background: #101714;
+  border: 1px dashed var(--line);
+  text-align: center;
+  color: var(--muted);
+}
+.locker-footer,
+.archive-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 18px clamp(14px, 4vw, 56px);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font: 9px var(--mono);
+  letter-spacing: 0.1em;
+}
+@media (max-width: 850px) {
+  .locker-layout {
+    grid-template-columns: 1fr;
+  }
+  .operator-panel {
+    position: relative;
+    top: auto;
+  }
+  .operator-stage {
+    height: 290px;
+  }
+}
+@media (max-width: 520px) {
+  .locker-top,
+  .archive-top {
+    grid-template-columns: auto 1fr auto;
+    padding: 10px 12px;
+    min-height: 68px;
+  }
+  .back-link span {
+    display: none;
+  }
+  .page-brand {
+    text-align: left;
+  }
+  .page-brand span {
+    font-size: 8px;
+  }
+  .page-brand h1 {
+    font-size: 22px;
+  }
+  .switch-link {
+    font-size: 9px;
+  }
+  .locker-layout {
+    padding: 16px 12px 30px;
+  }
+  .section-heading h2 {
+    font-size: 32px;
+  }
+  .loadout-slots {
+    grid-template-columns: 1fr;
+  }
+  .gear-card {
+    padding: 10px;
+  }
+  .gear-art {
+    height: 68px;
+  }
+  .gear-card h3 {
+    font-size: 17px;
+  }
+  .locker-footer {
+    font-size: 8px;
+  }
+}
+.btn-lime {
+  background: var(--lime);
+  color: #10150c;
+  border: 0;
+  border-radius: 0;
+  font: 700 11px var(--mono);
+  padding: 9px 12px;
+}
+.btn-lime:hover {
+  background: #e0ff9b;
+  color: #10150c;
+}
+.unequip-btn:disabled {
+  opacity: 0.35;
+}

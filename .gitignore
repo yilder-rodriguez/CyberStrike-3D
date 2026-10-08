@@ -1,0 +1,12 @@
+# Secretos, dependencias y datos locales: no subirlos al repositorio.
+node_modules/
+firebase/functions/node_modules/
+firebase/node_modules/
+.env
+.env.*
+!.env.example
+*service-account*.json
+*adminsdk*.json
+firebase-debug.log
+firestore-debug.log
+ui-debug.log

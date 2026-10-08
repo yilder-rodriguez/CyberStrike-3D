@@ -1,6 +1,21 @@
-# CyberStriker 3D
+# 🌆 CyberStriker 3D
 
-Juego web 3D del parche, creado por YILDER RODRIGUEZ.
+> Shooter 3D y parkour cyberpunk con sabor callejero colombiano, creado por **YILDER RODRIGUEZ**.
+
+![Three.js](https://img.shields.io/badge/Three.js-3D-black?logo=three.js)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?logo=bootstrap)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES%20Modules-F7DF1E?logo=javascript)
+![Hosting](https://img.shields.io/badge/Hosting-GitHub%20Pages-222222?logo=github)
+
+## Modos y sistemas
+
+- **Combate:** partida contra bots y opción online cuando Firebase Realtime Database está conectada.
+- **Parkour:** recorrido de saltos, checkpoints, obstáculos y cristales coleccionables.
+- **Progreso:** perfil, inventario, colección, rangos, temporadas, tienda y ruletas.
+- **Social:** solicitudes de amistad, presencia e invitaciones si Firebase está configurado.
+- **Administración:** roles con permisos, directorio, códigos, regalos y gestión de contenido.
+
+El sitio se publica como contenido estático en GitHub Pages. Authentication, progreso compartido y operaciones administrativas requieren el proyecto Firebase que configures.
 
 ## Publicar en GitHub Pages
 

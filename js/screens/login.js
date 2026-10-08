@@ -1,5 +1,10 @@
 import { auth } from '../services/auth.js';
 import { DATA_POLICY_VERSION } from '../services/privacy.js';
+import { firebaseReady } from '../core/firebase-config.js';
+
+document.querySelector('#connection-status').textContent = firebaseReady
+  ? 'CONFIGURACIÓN FIREBASE DETECTADA'
+  : 'MODO LOCAL · NUBE PENDIENTE';
 
 const form = document.querySelector('#auth-form');
 const feedback = document.querySelector('#auth-feedback');
@@ -29,6 +34,8 @@ function mode(next) {
   document.querySelector('#confirm-wrap').classList.toggle('d-none', !registering);
   document.querySelector('#password-notice').classList.toggle('d-none', !registering);
   document.querySelector('#data-consent-row').classList.toggle('d-none', !(registering || consentOnly));
+  consent.required = registering || consentOnly;
+  consent.disabled = !(registering || consentOnly);
   document.querySelector('#remember-row').classList.toggle('d-none', registering || consentOnly);
   password.autocomplete = registering ? 'new-password' : 'current-password';
   submit.querySelector('span').textContent = consentOnly
